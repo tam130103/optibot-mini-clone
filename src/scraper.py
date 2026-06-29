@@ -7,10 +7,29 @@ import re
 import time
 
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 from src.html_to_md import format_article
 
 logger = logging.getLogger(__name__)
+
+MAX_RETRIES = 3
+RETRY_BACKOFF = 2  # seconds multiplier
+
+
+def _get_session() -> requests.Session:
+    """Create a requests session with retry/backoff for transient errors."""
+    retry = Retry(
+        total=MAX_RETRIES,
+        backoff_factor=RETRY_BACKOFF,
+        status_forcelist=[429, 500, 502, 503, 504],
+        allowed_methods=["GET"],
+    )
+    adapter = HTTPAdapter(max_retries=retry)
+    session = requests.Session()
+    session.mount("https://", adapter)
+    return session
 
 
 def fetch_all_articles(base_url: str) -> list[dict]:
@@ -22,13 +41,14 @@ def fetch_all_articles(base_url: str) -> list[dict]:
     url = f"https://{base_url}/api/v2/help_center/en-us/articles.json"
     params = {"per_page": 100}
     articles = []
+    session = _get_session()
 
     page = 0
     while url:
         page += 1
         logger.info(f"Fetching page {page}...")
 
-        resp = requests.get(url, params=params, timeout=30)
+        resp = session.get(url, params=params, timeout=30)
         resp.raise_for_status()
         data = resp.json()
 

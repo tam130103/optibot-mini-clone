@@ -160,6 +160,34 @@ def upsert_articles(
     return {"files_processed": files_processed, "chunks_upserted": total_chunks}
 
 
+def delete_articles(article_ids: list[str]) -> dict:
+    """Remove chunks for deleted/unpublished articles from ChromaDB.
+
+    Returns stats dict: {articles_removed, chunks_deleted}.
+    """
+    if not article_ids:
+        return {"articles_removed": 0, "chunks_deleted": 0}
+
+    collection = get_collection()
+    total_chunks = 0
+    articles_removed = 0
+
+    for article_id in article_ids:
+        try:
+            existing = collection.get(where={"article_id": article_id})
+            if existing and existing["ids"]:
+                collection.delete(ids=existing["ids"])
+                total_chunks += len(existing["ids"])
+                articles_removed += 1
+        except Exception:
+            pass
+
+    logger.info(
+        f"Removed {articles_removed} articles → {total_chunks} chunks deleted"
+    )
+    return {"articles_removed": articles_removed, "chunks_deleted": total_chunks}
+
+
 def query(question: str, n_results: int = 5) -> list[dict]:
     """Query the vector store for relevant article chunks.
 

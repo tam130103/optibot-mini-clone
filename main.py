@@ -6,7 +6,7 @@ import sys
 from src.config import ARTICLES_DIR, STATE_FILE, ZENDESK_BASE
 from src.delta import compute_delta, load_state, save_state
 from src.scraper import fetch_all_articles, save_articles
-from src.vector_store import upsert_articles
+from src.vector_store import delete_articles, upsert_articles
 
 logging.basicConfig(
     level=logging.INFO,
@@ -50,10 +50,16 @@ def main() -> int:
     else:
         logger.info("No changes detected — vector store is up to date")
 
-    # 6. Save new state for next run
+    # 6. Remove deleted/unpublished articles from vector store
+    removed_ids = delta["removed"]
+    if removed_ids:
+        logger.info(f"Removing {len(removed_ids)} deleted articles from vector store...")
+        delete_articles(removed_ids)
+
+    # 7. Save new state for next run
     save_state(STATE_FILE, new_hashes)
 
-    # 7. Summary
+    # 8. Summary
     logger.info("=" * 60)
     logger.info("  Summary")
     logger.info("=" * 60)

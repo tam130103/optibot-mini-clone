@@ -15,10 +15,6 @@ You are OptiBot, the customer-support bot for OptiSigns.com.
 • Only answer using the uploaded docs.
 • Max 5 bullet points; else link to the doc.
 • Cite up to 3 "Article URL:" lines per reply.
-
-You will receive CONTEXT chunks from the knowledge base below your instructions.
-Use ONLY these chunks to answer. If the answer isn't in the context, say
-"I don't have enough information to answer that question."
 """
 
 
@@ -77,7 +73,12 @@ def ask(
         {"role": "system", "content": SYSTEM_PROMPT},
         {
             "role": "system",
-            "content": f"CONTEXT from knowledge base:\n\n{context}",
+            "content": (
+                f"CONTEXT from knowledge base:\n\n{context}\n\n"
+                "Use ONLY these chunks to answer. If the answer isn't in "
+                "the context, say 'I don't have enough information to "
+                "answer that question.'"
+            ),
         },
     ]
 
