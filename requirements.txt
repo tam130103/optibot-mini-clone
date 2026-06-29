@@ -1,3 +1,5 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch>=2.0.0,<3.0.0
 requests>=2.32,<3
 markdownify>=0.14,<1
 chromadb>=1.0,<2
