@@ -49,7 +49,7 @@ SHA-256 content hashes in `state.json`. Only new/changed articles re-embedded. L
 ## Daily Job
 
 Deployed on DigitalOcean App Platform via `cron: "0 3 * * *"`. See `.do/app.yaml`.
-Logs: [DigitalOcean App → daily-scrape](https://cloud.digitalocean.com/apps/3579483a-f0b1-41e2-874c-1ce24348ee05/deployments/8d63ded7-a09c-4400-9f67-42e0c78dc05f?i=fa5c46)
+Logs: [DigitalOcean App → daily-scrape](https://cloud.digitalocean.com/apps/3579483a-f0b1-41e2-874c-1ce24348ee05/deployments/62a863ff-88dc-4f4d-8cd1-8b019a06b1af?i=fa5c46)
 
 ## Tests
 
