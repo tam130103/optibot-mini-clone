@@ -3,7 +3,7 @@ jobs:
   - name: daily-scrape
     dockerfile_path: Dockerfile
     github:
-      repo: your-gh/optibot-mini-clone
+      repo: tam130103/optibot-mini-clone
       branch: main
       deploy_on_push: true
     instance_size_slug: professional-xs
