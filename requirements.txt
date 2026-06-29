@@ -1,0 +1,7 @@
+requests>=2.32,<3
+markdownify>=0.14,<1
+chromadb>=1.0,<2
+sentence-transformers>=3.0,<4
+openai>=1.40,<2
+python-dotenv>=1.0,<2
+beautifulsoup4>=4.12,<5
