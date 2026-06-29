@@ -1,0 +1,18 @@
+name: optibot-scraper
+jobs:
+  - name: daily-scrape
+    dockerfile_path: Dockerfile
+    github:
+      repo: your-username/your-cryptic-repo-name
+      branch: main
+      deploy_on_push: true
+    instance_size_slug: professional-xs
+    instance_count: 1
+    envs:
+      - key: DEEPSEEK_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+        value: ${DEEPSEEK_API_KEY}
+    run_command: python main.py
+    # Daily at 3 AM UTC
+    cron: "0 3 * * *"
